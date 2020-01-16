@@ -8,10 +8,15 @@
 
 import Cocoa
 
+struct TrackInformation: Codable {
+    var trackName: String
+    var albumName: String
+    var imageData: Data
+}
+
 class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, BonjourServerDelegate, BonjourClientDelegate {
     
     //MARK: - Propeties
-    
     var informationAboutSoundTrack: Dictionary<String, Any> = [:]
     var trackInformationArray: [InformationAboutTrack] = []
     
@@ -27,7 +32,6 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     //MARK: - Outlets
-    
     @IBOutlet private var tableView: NSTableView!
     @IBOutlet private var commandFromRemote: NSTextField!
     @IBOutlet weak var trackImage: NSImageView!
@@ -36,7 +40,6 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     @IBOutlet weak var connectedToLabel: NSTextField!
     
     //MARK: - LifeCycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         let trackNumberOne = InformationAboutTrack()
@@ -54,10 +57,10 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
-       
+        
     }
     
-    //MARK: Bonjour server delegates
+    //MARK: - Bonjour server delegates
     func didChangeServices() {
         //        tableView.reloadData()
     }
@@ -76,7 +79,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     func handleBody(_ body: Data?) {
         guard let body = body else { return }
         if let command = String(data: body, encoding: .utf8) {
-             commandFromRemote.stringValue = command
+            commandFromRemote.stringValue = command
         }
         
         if commandFromRemote.stringValue == "PLAY" {
@@ -94,7 +97,7 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             bonjourClient.send(dataToSend)
         }    }
     
-    //MARK: TableView Delegates
+    //MARK: - TableView Delegates
     func numberOfRows(in aTableView: NSTableView) -> Int {
         return bonjourServer.devices.count
     }
@@ -121,11 +124,9 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     
     private func createJson(with titleSound: String, with titleAlbum: String, with image: NSImage) -> Data? {
         guard let imageData = image.tiffRepresentation else { return Data() }
-        let soundPlayer = TrackInformation(titleSound: titleSound, titleAlbum: titleAlbum, imageData: imageData)
+        let soundPlayer = TrackInformation(trackName: titleSound, albumName: titleAlbum, imageData: imageData)
         return try? JSONEncoder().encode(soundPlayer)
     }
-    
-    
     
     //    //MARK: - Private
     //
@@ -135,8 +136,4 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     //        }
     //    }
 }
-struct TrackInformation: Codable {
-    var titleSound: String
-    var titleAlbum: String
-    var imageData: Data
-}
+
