@@ -14,12 +14,11 @@ struct TrackInformation: Codable {
     var imageData: Data
 }
 
-class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSource, BonjourServerDelegate, BonjourClientDelegate {
+class ViewController: NSViewController {
     
     //MARK: - Propeties
-    var informationAboutSoundTrack: Dictionary<String, Any> = [:]
-    var trackInformationArray: [InformationAboutTrack] = []
     
+    var trackInformationArray: [InformationAboutTrack] = []
     private var bonjourServer: BonjourServer! {
         didSet {
             bonjourServer.delegate = self
@@ -32,14 +31,15 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
     }
     
     //MARK: - Outlets
-    @IBOutlet private var tableView: NSTableView!
-    @IBOutlet private var commandFromRemote: NSTextField!
-    @IBOutlet weak var trackImage: NSImageView!
-    @IBOutlet weak var trackNameLabel: NSTextField!
-    @IBOutlet weak var albumNameLabel: NSTextField!
-    @IBOutlet weak var connectedToLabel: NSTextField!
     
-    //MARK: - LifeCycle
+    @IBOutlet private weak var tableView: NSTableView!
+    @IBOutlet private weak var commandFromRemote: NSTextField!
+    @IBOutlet private weak var trackImage: NSImageView!
+    @IBOutlet private weak var trackNameLabel: NSTextField!
+    @IBOutlet private weak var albumNameLabel: NSTextField!
+    @IBOutlet private weak var connectedToLabel: NSTextField!
+    
+    //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         let trackNumberOne = InformationAboutTrack()
@@ -60,18 +60,28 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         
     }
     
-    //MARK: - Bonjour server delegates
+    private func createJson(with titleSound: String, with titleAlbum: String, with image: NSImage) -> Data? {
+        guard let imageData = image.tiffRepresentation else { return Data() }
+        let soundPlayer = TrackInformation(trackName: titleSound, albumName: titleAlbum, imageData: imageData)
+        return try? JSONEncoder().encode(soundPlayer)
+    }
+}
+
+//MARK: - BonjourServerDelegate, BonjourClientDelegate
+
+extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     func didChangeServices() {
-        //        tableView.reloadData()
+        print("didChangeServices in bonjour demo mac ")
     }
     
     func connected() {
+        print("connected in bonjour demo mac ")
     }
     
     func disconnected() {
+        print("disconnected in bonjour demo mac ")
     }
     
-    //MARK: - For client delegate
     func connectedTo(_ socket: GCDAsyncSocket!) {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
     }
@@ -95,9 +105,13 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
         if let image = trackImage.image,
             let dataToSend = createJson(with: trackNameLabel.stringValue, with: albumNameLabel.stringValue, with: image) {
             bonjourClient.send(dataToSend)
-        }    }
-    
-    //MARK: - TableView Delegates
+        }
+    }
+}
+
+//MARK: - NSTableViewDelegate, NSTableViewDataSource
+
+extension ViewController: NSTableViewDelegate, NSTableViewDataSource {
     func numberOfRows(in aTableView: NSTableView) -> Int {
         return bonjourServer.devices.count
     }
@@ -121,19 +135,4 @@ class ViewController: NSViewController, NSTableViewDelegate, NSTableViewDataSour
             bonjourServer.connectTo(service)
         }
     }
-    
-    private func createJson(with titleSound: String, with titleAlbum: String, with image: NSImage) -> Data? {
-        guard let imageData = image.tiffRepresentation else { return Data() }
-        let soundPlayer = TrackInformation(trackName: titleSound, albumName: titleAlbum, imageData: imageData)
-        return try? JSONEncoder().encode(soundPlayer)
-    }
-    
-    //    //MARK: - Private
-    //
-    //    @IBAction private func sendData(_ sender: NSButton) {
-    //        if let data = toSendTextField.stringValue.data(using: String.Encoding.utf8) {
-    //            bonjourServer.send(data)
-    //        }
-    //    }
 }
-

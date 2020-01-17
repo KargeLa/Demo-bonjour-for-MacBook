@@ -28,8 +28,8 @@
 		1AF39D231AFCE59900A5BD43 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		1AF39D391AFCE5C300A5BD43 /* bonjour-demo-mac-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "bonjour-demo-mac-Bridging-Header.h"; sourceTree = "<group>"; };
 		1AF475591B04BCBE00E84914 /* BonjourServer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourServer.swift; sourceTree = "<group>"; };
-		1AF475641B04CED500E84914 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = SOURCE_ROOT; };
-		1AF475651B04CED500E84914 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GCDAsyncSocket.m; sourceTree = SOURCE_ROOT; };
+		1AF475641B04CED500E84914 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "bonjour-demo-mac/GCDAsyncSocket.h"; sourceTree = SOURCE_ROOT; };
+		1AF475651B04CED500E84914 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "bonjour-demo-mac/GCDAsyncSocket.m"; sourceTree = SOURCE_ROOT; };
 		957626E023B61C0A00696C7E /* BonjourClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourClient.swift; sourceTree = "<group>"; };
 		FAE40E3723B632C500FE3E31 /* InformationAboutTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationAboutTrack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -45,6 +45,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		15B3B73D23D1B919005F9D21 /* Extensions&Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				1ABC4E081B021338007A2945 /* Array+removeObject.swift */,
+			);
+			name = "Extensions&Helpers";
+			sourceTree = "<group>";
+		};
+		15B3B73E23D1B934005F9D21 /* Net Services */ = {
+			isa = PBXGroup;
+			children = (
+				957626E023B61C0A00696C7E /* BonjourClient.swift */,
+				1AF475591B04BCBE00E84914 /* BonjourServer.swift */,
+				1AF475641B04CED500E84914 /* GCDAsyncSocket.h */,
+				1AF475651B04CED500E84914 /* GCDAsyncSocket.m */,
+				1AF39D391AFCE5C300A5BD43 /* bonjour-demo-mac-Bridging-Header.h */,
+			);
+			name = "Net Services";
+			sourceTree = "<group>";
+		};
 		1AF39D0E1AFCE59900A5BD43 = {
 			isa = PBXGroup;
 			children = (
@@ -64,16 +84,10 @@
 		1AF39D191AFCE59900A5BD43 /* bonjour-demo-mac */ = {
 			isa = PBXGroup;
 			children = (
-				1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */,
-				1ABC4E081B021338007A2945 /* Array+removeObject.swift */,
-				957626E023B61C0A00696C7E /* BonjourClient.swift */,
-				1AF475591B04BCBE00E84914 /* BonjourServer.swift */,
-				1AF475641B04CED500E84914 /* GCDAsyncSocket.h */,
-				1AF475651B04CED500E84914 /* GCDAsyncSocket.m */,
-				1AF39D391AFCE5C300A5BD43 /* bonjour-demo-mac-Bridging-Header.h */,
-				1AF39D201AFCE59900A5BD43 /* Images.xcassets */,
-				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
+				15B3B73D23D1B919005F9D21 /* Extensions&Helpers */,
+				15B3B73E23D1B934005F9D21 /* Net Services */,
 				1AF39D1A1AFCE59900A5BD43 /* Supporting Files */,
+				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
 				FAE40E3723B632C500FE3E31 /* InformationAboutTrack.swift */,
 			);
@@ -83,6 +97,8 @@
 		1AF39D1A1AFCE59900A5BD43 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1AF39D201AFCE59900A5BD43 /* Images.xcassets */,
+				1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */,
 				1AF39D1B1AFCE59900A5BD43 /* Info.plist */,
 			);
 			name = "Supporting Files";
@@ -121,7 +137,7 @@
 				TargetAttributes = {
 					1AF39D161AFCE59900A5BD43 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = CH3F29MQH7;
+						DevelopmentTeam = 3CNUVF272Y;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
@@ -298,7 +314,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = CH3F29MQH7;
+				DEVELOPMENT_TEAM = 3CNUVF272Y;
 				INFOPLIST_FILE = "bonjour-demo-mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";
@@ -318,7 +334,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = CH3F29MQH7;
+				DEVELOPMENT_TEAM = 3CNUVF272Y;
 				INFOPLIST_FILE = "bonjour-demo-mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";
