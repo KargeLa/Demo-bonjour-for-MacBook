@@ -8,8 +8,3 @@
 
 import Foundation
 
-class InformationAboutTrack {
-    var trackName: String?
-    var albumName: String?
-//    var trackImage: Image?
-}

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15505" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
+<document type="com.apple.InterfaceBuilder3.Cocoa.Storyboard.XIB" version="3.0" toolsVersion="15702" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" useAutolayout="YES" initialViewController="B8D-0N-5wS">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="15702"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -727,6 +727,30 @@
                                     <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
                                 </textFieldCell>
                             </textField>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OKi-l4-guI">
+                                <rect key="frame" x="388" y="129" width="40" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarRewindTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="e2N-wd-Rf4">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="pso-sm-br5">
+                                <rect key="frame" x="388" y="105" width="40" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarFastForwardTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7WN-2X-uah">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
+                            <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="XXr-53-XmY">
+                                <rect key="frame" x="386" y="156" width="42" height="32"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarPlayPauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ryc-VV-HIx">
+                                    <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                                    <font key="font" metaFont="system"/>
+                                </buttonCell>
+                            </button>
                         </subviews>
                     </view>
                     <connections>
@@ -742,4 +766,9 @@
             <point key="canvasLocation" x="75" y="655"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="NSTouchBarFastForwardTemplate" width="22" height="30"/>
+        <image name="NSTouchBarPlayPauseTemplate" width="23" height="30"/>
+        <image name="NSTouchBarRewindTemplate" width="22" height="30"/>
+    </resources>
 </document>

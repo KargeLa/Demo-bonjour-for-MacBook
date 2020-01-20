@@ -12,13 +12,17 @@ struct TrackInformation: Codable {
     var trackName: String
     var albumName: String
     var imageData: Data
+    
+    var json: Data? {
+        return try? JSONEncoder().encode(self)
+    }
 }
 
 class ViewController: NSViewController {
     
     //MARK: - Propeties
     
-    var trackInformationArray: [InformationAboutTrack] = []
+    var tracksInformation: [TrackInformation] = []
     private var bonjourServer: BonjourServer! {
         didSet {
             bonjourServer.delegate = self
@@ -42,18 +46,18 @@ class ViewController: NSViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        let trackNumberOne = InformationAboutTrack()
-        trackNumberOne.trackName = "trackNumberOne"
-        trackNumberOne.albumName = "albumNumberOne"
-        trackInformationArray.append(trackNumberOne)
-        let trackNumberTwo = InformationAboutTrack()
-        trackNumberTwo.trackName = "trackNumberTwo"
-        trackNumberTwo.albumName = "albumNumberTwo"
-        trackInformationArray.append(trackNumberTwo)
-        let trackNumberThird = InformationAboutTrack()
-        trackNumberThird.trackName = "trackNumberThird"
-        trackNumberThird.albumName = "albumNumberThird"
-        trackInformationArray.append(trackNumberThird)
+        
+        
+        let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
+        tracksInformation.append(firstTrack)
+        
+        let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
+        tracksInformation.append(secondTrack)
+        
+        let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
+        tracksInformation.append(thirdTrack)
+        
+        
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -93,19 +97,24 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         }
         
         if commandFromRemote.stringValue == "PLAY" {
-            trackNameLabel.stringValue = trackInformationArray[0].trackName!
-            albumNameLabel.stringValue = trackInformationArray[0].albumName!
-            trackImage.image = NSImage(named: "image_1")
+            configOutletsFromModel(trackInformation: tracksInformation[0])
+            if let dataToSend = tracksInformation[0].json {
+                bonjourClient.send(dataToSend)
+            }
         } else {
-            trackNameLabel.stringValue = " "
-            albumNameLabel.stringValue = " "
-            trackImage.image = NSImage(named: "pause")
+            let emptyTrack = TrackInformation(trackName: "", albumName: "", imageData: (NSImage(named: "pause")?.tiffRepresentation)!)
+            configOutletsFromModel(trackInformation: emptyTrack)
+            if let dataToSend = emptyTrack.json {
+                bonjourClient.send(dataToSend)
+            }
         }
         
-        if let image = trackImage.image,
-            let dataToSend = createJson(with: trackNameLabel.stringValue, with: albumNameLabel.stringValue, with: image) {
-            bonjourClient.send(dataToSend)
-        }
+    }
+    
+    private func configOutletsFromModel(trackInformation: TrackInformation) {
+        trackNameLabel.stringValue = trackInformation.trackName
+        albumNameLabel.stringValue = trackInformation.albumName
+        trackImage.image = NSImage(data: trackInformation.imageData)
     }
 }
 
