@@ -15,7 +15,6 @@
 		1AF4755A1B04BCBE00E84914 /* BonjourServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF475591B04BCBE00E84914 /* BonjourServer.swift */; };
 		1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF475651B04CED500E84914 /* GCDAsyncSocket.m */; };
 		957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957626E023B61C0A00696C7E /* BonjourClient.swift */; };
-		FAE40E3823B632C500FE3E31 /* InformationAboutTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE40E3723B632C500FE3E31 /* InformationAboutTrack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,7 +30,6 @@
 		1AF475641B04CED500E84914 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "bonjour-demo-mac/GCDAsyncSocket.h"; sourceTree = SOURCE_ROOT; };
 		1AF475651B04CED500E84914 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "bonjour-demo-mac/GCDAsyncSocket.m"; sourceTree = SOURCE_ROOT; };
 		957626E023B61C0A00696C7E /* BonjourClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourClient.swift; sourceTree = "<group>"; };
-		FAE40E3723B632C500FE3E31 /* InformationAboutTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformationAboutTrack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +87,6 @@
 				1AF39D1A1AFCE59900A5BD43 /* Supporting Files */,
 				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
-				FAE40E3723B632C500FE3E31 /* InformationAboutTrack.swift */,
 			);
 			path = "bonjour-demo-mac";
 			sourceTree = "<group>";
@@ -179,7 +176,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */,
-				FAE40E3823B632C500FE3E31 /* InformationAboutTrack.swift in Sources */,
 				1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */,
 				957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */,
 				1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */,
