@@ -37,6 +37,8 @@ class ViewController: NSViewController {
         }
     }
     
+    private var countTrack = 0
+    
     //MARK: - Outlets
     
     @IBOutlet private weak var commandFromRemote: NSTextField!
@@ -66,21 +68,18 @@ class ViewController: NSViewController {
     }
     
     private func sendData(tracksInformation: [TrackInformation]) {
-        
         let trackResponse = TrackList(tracksInformation: tracksInformation)
-        
         guard let data = try? JSONEncoder().encode(trackResponse) else { return }
-        
-        
         
         bonjourClient.send(data)
     }
     
-    private func configOutletsFromModel(trackInformation: TrackInformation) {
+    private func updateUI(trackInformation: TrackInformation) {
         trackNameLabel.stringValue = trackInformation.trackName
         albumNameLabel.stringValue = trackInformation.albumName
         trackImage.image = NSImage(data: trackInformation.imageData)
     }
+
     
 }
 
@@ -103,28 +102,29 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
         
         sendData(tracksInformation: tracksInformation)
+        updateUI(trackInformation: tracksInformation[0])
     }
     
     func handleBody(_ body: Data?) {
         guard let body = body else { return }
         if let command = String(data: body, encoding: .utf8) {
-            commandFromRemote.stringValue = command
-        }
-        
-        if commandFromRemote.stringValue == "PLAY" {
-            configOutletsFromModel(trackInformation: tracksInformation[0])
-            if let dataToSend = tracksInformation[0].json {
-                bonjourClient.send(dataToSend)
+            switch command {
+            case "play":
+                commandFromRemote.stringValue = "Playning music"
+            case "pause":
+                commandFromRemote.stringValue = "music not playning "
+            case "back":
+                countTrack = countTrack - 1
+                updateUI(trackInformation: tracksInformation[countTrack])
+            case "forward":
+                countTrack = countTrack + 1
+                updateUI(trackInformation: tracksInformation[countTrack])
+
+            default:
+                print("Default")
             }
-        } else {
-            let emptyTrack = TrackInformation(trackName: "", albumName: "", imageData: (NSImage(named: "pause")?.tiffRepresentation)!)
-            configOutletsFromModel(trackInformation: emptyTrack)
-            if let dataToSend = emptyTrack.json {
-                bonjourClient.send(dataToSend)
-            }
+            
         }
-        
     }
-    
 
 }
