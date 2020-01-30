@@ -9,10 +9,14 @@
 import Cocoa
 
 struct TrackList: Codable {
+    
+    //MARK: - Properties
     var tracksInformation: [TrackInformation]
 }
 
 struct TrackInformation: Codable {
+    
+    //MARK: - Properties
     var trackName: String
     var albumName: String
     var imageData: Data
@@ -23,8 +27,8 @@ struct TrackInformation: Codable {
 }
 
 class ViewController: NSViewController {
-    //MARK: - Propeties
     
+    //MARK: - Propeties
     var tracksInformation: [TrackInformation] = []
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -38,7 +42,6 @@ class ViewController: NSViewController {
     }
     
     //MARK: - Outlets
-    
     @IBOutlet private weak var commandFromRemote: NSTextField!
     @IBOutlet private weak var trackImage: NSImageView!
     @IBOutlet private weak var trackNameLabel: NSTextField!
@@ -48,17 +51,13 @@ class ViewController: NSViewController {
     //MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         // create tracks
         let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
         tracksInformation.append(firstTrack)
-        
         let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
         tracksInformation.append(secondTrack)
-        
         let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
         tracksInformation.append(thirdTrack)
-        
     
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -66,13 +65,8 @@ class ViewController: NSViewController {
     }
     
     private func sendData(tracksInformation: [TrackInformation]) {
-        
         let trackResponse = TrackList(tracksInformation: tracksInformation)
-        
         guard let data = try? JSONEncoder().encode(trackResponse) else { return }
-        
-        
-        
         bonjourClient.send(data)
     }
     
@@ -81,11 +75,9 @@ class ViewController: NSViewController {
         albumNameLabel.stringValue = trackInformation.albumName
         trackImage.image = NSImage(data: trackInformation.imageData)
     }
-    
 }
 
-//MARK: - BonjourServerDelegate, BonjourClientDelegate
-
+    //MARK: - BonjourServerDelegate, BonjourClientDelegate
 extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     func didChangeServices() {
         print("didChangeServices in bonjour demo mac ")
@@ -101,7 +93,6 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
-        
         sendData(tracksInformation: tracksInformation)
     }
     
@@ -123,8 +114,5 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                 bonjourClient.send(dataToSend)
             }
         }
-        
     }
-    
-
 }
