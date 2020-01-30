@@ -22,14 +22,12 @@ protocol BonjourServerDelegate {
 
 class BonjourServer: NSObject, NetServiceBrowserDelegate, NetServiceDelegate, GCDAsyncSocketDelegate {
 
+    //MARK: - Properties
+    
     var delegate: BonjourServerDelegate!
-    
     var coServiceBrowser: NetServiceBrowser!
-    
     var devices: Array<NetService>!
-    
     var connectedService: NetService!
-    
     var sockets: [String : GCDAsyncSocket]!
     
     override init() {
@@ -187,5 +185,4 @@ class BonjourServer: NSObject, NetServiceBrowserDelegate, NetServiceDelegate, GC
         }
         return sock
     }
-    
 }

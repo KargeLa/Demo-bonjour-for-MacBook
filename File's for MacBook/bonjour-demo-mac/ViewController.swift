@@ -65,7 +65,7 @@ class ViewController: NSViewController {
         bonjourClient = BonjourClient()
         
     }
-    
+    //MARK: Sending a playlist to a remotecontrol
     private func sendData(tracksInformation: [TrackInformation]) {
         let trackResponse = TrackList(tracksInformation: tracksInformation)
         guard let data = try? JSONEncoder().encode(trackResponse) else { return }
@@ -73,6 +73,7 @@ class ViewController: NSViewController {
         bonjourClient.send(data)
     }
     
+    //MARK: Track information update in QXPlayer
     private func updateUI(trackInformation: TrackInformation) {
         trackNameLabel.stringValue = trackInformation.trackName
         albumNameLabel.stringValue = trackInformation.albumName
