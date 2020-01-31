@@ -13,6 +13,7 @@ struct TrackList: Codable {
     //MARK: - TrackList Properties
     
     var tracksInformation: [TrackInformation]
+    var currentTrack: TrackInformation?
 }
 
 struct TrackInformation: Codable {
