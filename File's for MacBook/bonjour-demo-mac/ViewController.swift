@@ -8,34 +8,12 @@
 
 import Cocoa
 
-struct TrackList: Codable {
-    
-    //MARK: - TrackList Properties
-    
-    var tracksInformation: [TrackInformation]
-    var currentTrack: TrackInformation?
-    
-    
-}
-
-struct TrackInformation: Codable {
-    
-    //MARK: - TrackInformation Properties
-    
-    var trackName: String
-    var albumName: String
-    var imageData: Data
-    
-    var json: Data? {
-        return try? JSONEncoder().encode(self)
-    }
-}
-
 class ViewController: NSViewController {
     
-    //MARK: - NSViewController Propeties
+    //MARK: - Propeties
     
-    var tracksInformation: [TrackInformation] = []
+    var trackList: TrackList?
+    
     private var bonjourServer: BonjourServer! {
         didSet {
             bonjourServer.delegate = self
@@ -46,8 +24,6 @@ class ViewController: NSViewController {
             bonjourClient.delegate = self
         }
     }
-    
-    private var countTrack = 0
     
     //MARK: - Outlets
     
@@ -62,12 +38,16 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // create tracks
+        var tracksInformation: [TrackInformation] = []
+        
         let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
         tracksInformation.append(firstTrack)
         let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
         tracksInformation.append(secondTrack)
         let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
         tracksInformation.append(thirdTrack)
+        
+        trackList = TrackList(tracksInformation: tracksInformation, currentTrack: tracksInformation[0])
     
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -75,34 +55,26 @@ class ViewController: NSViewController {
     }
     
     //MARK: Sending a playlist to a remotecontrol
-    private func sendData(tracksInformation: [TrackInformation]) {
-        let trackResponse = TrackList(tracksInformation: tracksInformation)
-        guard let data = try? JSONEncoder().encode(trackResponse) else { return }
+    
+    private func sendData(trackList: TrackList) {
+
+        guard let data = try? JSONEncoder().encode(trackList) else { return }
         
         bonjourClient.send(data)
     }
     
     //MARK: Track information update in QXPlayer
+    
     private func updateUI(trackInformation: TrackInformation) {
         trackNameLabel.stringValue = trackInformation.trackName
         albumNameLabel.stringValue = trackInformation.albumName
         trackImage.image = NSImage(data: trackInformation.imageData)
     }
     
-    private func findTrackByName(currentTrackName: String) -> TrackInformation? {
-        var i = 0
-        for trackInfo in tracksInformation {
-            if trackInfo.trackName == currentTrackName {
-                countTrack = i
-                return trackInfo
-            }
-            i = i + 1
-        }
-        return nil
-    }
+    
 }
 
-    //MARK: - BonjourServerDelegate, BonjourClientDelegate
+//MARK: - BonjourServerDelegate, BonjourClientDelegate
 
 extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     func didChangeServices() {
@@ -119,8 +91,11 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
-        sendData(tracksInformation: tracksInformation)
-        updateUI(trackInformation: tracksInformation[0])
+        
+        guard let trackList = trackList else { return }
+        updateUI(trackInformation: trackList.currentTrack)
+        
+        sendData(trackList: trackList)
     }
     
     func handleBody(_ body: Data?) {
@@ -132,13 +107,14 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             case "pause":
                 commandFromRemote.stringValue = "music not playning "
             case "back":
-                countTrack = countTrack - 1
-                updateUI(trackInformation: tracksInformation[countTrack])
+                guard let trackInformation = trackList?.prevTrack() else { return }
+                updateUI(trackInformation: trackInformation)
             case "forward":
-                countTrack = countTrack + 1
-                updateUI(trackInformation: tracksInformation[countTrack])
+                guard let trackInformation = trackList?.nextTrack() else { return }
+                updateUI(trackInformation: trackInformation)
             default:
-                if let trackInformation = findTrackByName(currentTrackName: command) {
+                if let trackInformation = trackList?.searchTrack(byTrackName: command) {
+                    trackList?.currentTrack = trackInformation
                     updateUI(trackInformation: trackInformation)
                 }
             }

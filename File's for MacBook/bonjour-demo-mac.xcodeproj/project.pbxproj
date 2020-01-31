@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		156BBE3323E4715000383DAA /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156BBE3223E4715000383DAA /* TrackModel.swift */; };
 		1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABC4E081B021338007A2945 /* Array+removeObject.swift */; };
 		1AF39D1D1AFCE59900A5BD43 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */; };
 		1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */; };
@@ -18,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		156BBE3223E4715000383DAA /* TrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
 		1ABC4E081B021338007A2945 /* Array+removeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+removeObject.swift"; sourceTree = "<group>"; };
 		1AF39D171AFCE59900A5BD43 /* bonjour-demo-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bonjour-demo-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AF39D1B1AFCE59900A5BD43 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				1AF39D1A1AFCE59900A5BD43 /* Supporting Files */,
 				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
+				156BBE3223E4715000383DAA /* TrackModel.swift */,
 			);
 			path = "bonjour-demo-mac";
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 			files = (
 				1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */,
 				1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */,
+				156BBE3323E4715000383DAA /* TrackModel.swift in Sources */,
 				957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */,
 				1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */,
 				1AF4755A1B04BCBE00E84914 /* BonjourServer.swift in Sources */,
