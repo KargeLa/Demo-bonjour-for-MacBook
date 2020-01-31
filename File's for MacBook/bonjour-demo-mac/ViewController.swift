@@ -10,14 +10,14 @@ import Cocoa
 
 struct TrackList: Codable {
     
-    //MARK: - Properties
+    //MARK: - TrackList Properties
     var tracksInformation: [TrackInformation]
     var currentTrack: TrackInformation?
 }
 
 struct TrackInformation: Codable {
     
-    //MARK: - Properties
+    //MARK: - TrackInformation Properties
     var trackName: String
     var albumName: String
     var imageData: Data
@@ -29,7 +29,7 @@ struct TrackInformation: Codable {
 
 class ViewController: NSViewController {
     
-    //MARK: - Propeties
+    //MARK: - NSViewController Propeties
     var tracksInformation: [TrackInformation] = []
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -66,7 +66,7 @@ class ViewController: NSViewController {
         bonjourClient = BonjourClient()
         
     }
-    
+    //MARK: Sending a playlist to a remotecontrol
     private func sendData(tracksInformation: [TrackInformation]) {
         let trackResponse = TrackList(tracksInformation: tracksInformation)
         guard let data = try? JSONEncoder().encode(trackResponse) else { return }
@@ -74,6 +74,7 @@ class ViewController: NSViewController {
         bonjourClient.send(data)
     }
     
+    //MARK: Track information update in QXPlayer
     private func updateUI(trackInformation: TrackInformation) {
         trackNameLabel.stringValue = trackInformation.trackName
         albumNameLabel.stringValue = trackInformation.albumName
@@ -119,8 +120,6 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             default:
                 print("Default")
             }
-            
         }
     }
-
 }
