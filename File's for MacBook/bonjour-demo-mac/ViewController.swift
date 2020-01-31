@@ -11,12 +11,14 @@ import Cocoa
 struct TrackList: Codable {
     
     //MARK: - TrackList Properties
+    
     var tracksInformation: [TrackInformation]
 }
 
 struct TrackInformation: Codable {
     
     //MARK: - TrackInformation Properties
+    
     var trackName: String
     var albumName: String
     var imageData: Data
@@ -29,6 +31,7 @@ struct TrackInformation: Codable {
 class ViewController: NSViewController {
     
     //MARK: - NSViewController Propeties
+    
     var tracksInformation: [TrackInformation] = []
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -44,6 +47,7 @@ class ViewController: NSViewController {
     private var countTrack = 0
     
     //MARK: - Outlets
+    
     @IBOutlet private weak var commandFromRemote: NSTextField!
     @IBOutlet private weak var trackImage: NSImageView!
     @IBOutlet private weak var trackNameLabel: NSTextField!
@@ -51,6 +55,7 @@ class ViewController: NSViewController {
     @IBOutlet private weak var connectedToLabel: NSTextField!
     
     //MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // create tracks
@@ -65,6 +70,7 @@ class ViewController: NSViewController {
         bonjourClient = BonjourClient()
         
     }
+    
     //MARK: Sending a playlist to a remotecontrol
     private func sendData(tracksInformation: [TrackInformation]) {
         let trackResponse = TrackList(tracksInformation: tracksInformation)
@@ -82,6 +88,7 @@ class ViewController: NSViewController {
 }
 
     //MARK: - BonjourServerDelegate, BonjourClientDelegate
+
 extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     func didChangeServices() {
         print("didChangeServices in bonjour demo mac ")
