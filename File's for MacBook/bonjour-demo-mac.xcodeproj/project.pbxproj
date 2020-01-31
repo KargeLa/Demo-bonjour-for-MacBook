@@ -134,7 +134,7 @@
 				TargetAttributes = {
 					1AF39D161AFCE59900A5BD43 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = CH3F29MQH7;
+						DevelopmentTeam = 3CNUVF272Y;
 						LastSwiftMigration = 1020;
 						ProvisioningStyle = Manual;
 					};
@@ -310,7 +310,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = CH3F29MQH7;
+				DEVELOPMENT_TEAM = 3CNUVF272Y;
 				INFOPLIST_FILE = "bonjour-demo-mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";
@@ -330,7 +330,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = CH3F29MQH7;
+				DEVELOPMENT_TEAM = 3CNUVF272Y;
 				INFOPLIST_FILE = "bonjour-demo-mac/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "zaghini.$(PRODUCT_NAME:rfc1034identifier)";

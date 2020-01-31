@@ -14,6 +14,8 @@ struct TrackList: Codable {
     
     var tracksInformation: [TrackInformation]
     var currentTrack: TrackInformation?
+    
+    
 }
 
 struct TrackInformation: Codable {
@@ -86,6 +88,18 @@ class ViewController: NSViewController {
         albumNameLabel.stringValue = trackInformation.albumName
         trackImage.image = NSImage(data: trackInformation.imageData)
     }
+    
+    private func findTrackByName(currentTrackName: String) -> TrackInformation? {
+        var i = 0
+        for trackInfo in tracksInformation {
+            if trackInfo.trackName == currentTrackName {
+                countTrack = i
+                return trackInfo
+            }
+            i = i + 1
+        }
+        return nil
+    }
 }
 
     //MARK: - BonjourServerDelegate, BonjourClientDelegate
@@ -123,9 +137,10 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             case "forward":
                 countTrack = countTrack + 1
                 updateUI(trackInformation: tracksInformation[countTrack])
-
             default:
-                print("Default")
+                if let trackInformation = findTrackByName(currentTrackName: command) {
+                    updateUI(trackInformation: trackInformation)
+                }
             }
         }
     }
