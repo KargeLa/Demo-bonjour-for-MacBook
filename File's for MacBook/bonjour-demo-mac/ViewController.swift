@@ -48,7 +48,7 @@ class ViewController: NSViewController {
         tracksInformation.append(thirdTrack)
         
         trackList = TrackList(tracksInformation: tracksInformation, currentTrack: tracksInformation[0])
-    
+        
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
         
@@ -87,6 +87,13 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     
     func disconnected() {
         print("disconnected in bonjour demo mac ")
+        bonjourServer = BonjourServer()
+        bonjourClient = BonjourClient()
+        trackNameLabel.stringValue = ""
+        albumNameLabel.stringValue = ""
+        trackImage.image = NSImage()
+        commandFromRemote.stringValue = ""
+         connectedToLabel.stringValue = ""
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {

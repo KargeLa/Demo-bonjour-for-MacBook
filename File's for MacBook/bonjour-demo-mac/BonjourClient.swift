@@ -83,7 +83,7 @@ class BonjourClient: NSObject, NetServiceDelegate, NetServiceBrowserDelegate, GC
     
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
         print("socket did disconnect: error \(String(describing: err))")
-        if socket == socket {
+        if socket == sock {
             delegate.disconnected()
         }
     }
