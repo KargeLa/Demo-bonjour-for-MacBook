@@ -109,9 +109,9 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         guard let body = body else { return }
         if let command = String(data: body, encoding: .utf8) {
             switch command {
-            case "play":
+            case "playningMusic":
                 commandFromRemote.stringValue = "Playning music"
-            case "pause":
+            case "notPlayningMusic":
                 commandFromRemote.stringValue = "music not playning "
             case "back":
                 guard let trackInformation = trackList?.prevTrack() else { return }

@@ -13,14 +13,7 @@ struct TrackList: Codable {
     var currentTrack: TrackInformation
     
     func searchTrack(byTrackName trackName: String) -> TrackInformation? {
-        var i = 0
-        for trackInfo in tracksInformation {
-            if trackInfo.trackName == trackName {
-                return trackInfo
-            }
-            i = i + 1
-        }
-        return nil
+        return tracksInformation.first { $0.trackName == trackName }
     }
     
     mutating func nextTrack() -> TrackInformation? {
