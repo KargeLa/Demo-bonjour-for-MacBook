@@ -17,37 +17,28 @@ struct TrackList: Codable {
     }
     
     mutating func nextTrack() -> TrackInformation? {
-        
-        if currentTrack.trackName == tracksInformation[tracksInformation.count - 1].trackName {
+       if currentTrack.trackName == tracksInformation.last?.trackName {
             return nil
         } else {
-            var i = 0
-            for trackInfo in tracksInformation {
-                if currentTrack.trackName == trackInfo.trackName {
-                    currentTrack = tracksInformation[i + 1]
-                    return currentTrack
-                }
-                i = i + 1
-            }
+            guard let currentIndex = tracksInformation.firstIndex(where: { $0.trackName == currentTrack.trackName }) else { return nil }
+            currentTrack = tracksInformation[currentIndex + 1]
+            return currentTrack
         }
-        return nil
     }
     
     mutating func prevTrack() -> TrackInformation? {
-        
-        if currentTrack.trackName == tracksInformation[0].trackName {
+       if currentTrack.trackName == tracksInformation.first?.trackName {
             return nil
         } else {
-            var i = 0
-            for trackInfo in tracksInformation {
-                if currentTrack.trackName == trackInfo.trackName {
-                    currentTrack = tracksInformation[i - 1]
-                    return currentTrack
-                }
-                i = i + 1
-            }
+            guard let currentIndex = tracksInformation.firstIndex(where: { $0.trackName == currentTrack.trackName }) else { return nil }
+            currentTrack = tracksInformation[currentIndex - 1]
+            return currentTrack
         }
-        return nil
+    }
+    
+    var json: Data? {
+        guard let data = try? JSONEncoder().encode(self) else { return nil }
+        return data
     }
 }
 

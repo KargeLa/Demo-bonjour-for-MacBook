@@ -25,6 +25,12 @@ class ViewController: NSViewController {
         }
     }
     
+    var currentState: StatePlay = .notPlayningMusic {
+        didSet {
+            commandFromRemote.stringValue = currentState.rawValue
+        }
+    }
+
     //MARK: - Outlets
     
     @IBOutlet private weak var commandFromRemote: NSTextField!
@@ -54,11 +60,20 @@ class ViewController: NSViewController {
         
     }
     
+    //MARK: - Action
+    
+    @IBAction func playButtonAction(_ sender: Any) {
+        if connectedToLabel.stringValue != "" {
+            currentState = currentState.opposite
+            sendCommand(command: currentState.rawValue)
+        }
+    }
+    
     //MARK: Sending a playlist to a remotecontrol
     
     private func sendData(trackList: TrackList) {
 
-        guard let data = try? JSONEncoder().encode(trackList) else { return }
+        guard let data = trackList.json else { return }
         
         bonjourClient.send(data)
     }
@@ -71,6 +86,11 @@ class ViewController: NSViewController {
         trackImage.image = NSImage(data: trackInformation.imageData)
     }
     
+    private func sendCommand(command: String) {
+        if let data = command.data(using: .utf8) {
+            bonjourClient.send(data)
+        }
+    }
     
 }
 
@@ -93,7 +113,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         albumNameLabel.stringValue = ""
         trackImage.image = NSImage()
         commandFromRemote.stringValue = ""
-         connectedToLabel.stringValue = ""
+        connectedToLabel.stringValue = ""
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
@@ -110,9 +130,9 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         if let command = String(data: body, encoding: .utf8) {
             switch command {
             case "playningMusic":
-                commandFromRemote.stringValue = "Playning music"
+                currentState = .playningMusic
             case "notPlayningMusic":
-                commandFromRemote.stringValue = "music not playning "
+                currentState = .notPlayningMusic
             case "back":
                 guard let trackInformation = trackList?.prevTrack() else { return }
                 updateUI(trackInformation: trackInformation)

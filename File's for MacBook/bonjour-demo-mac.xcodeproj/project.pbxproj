@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		151F600423FA9D3D006D326C /* StatePlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151F600323FA9D3D006D326C /* StatePlay.swift */; };
 		156BBE3323E4715000383DAA /* TrackModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156BBE3223E4715000383DAA /* TrackModel.swift */; };
 		1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ABC4E081B021338007A2945 /* Array+removeObject.swift */; };
 		1AF39D1D1AFCE59900A5BD43 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF39D1C1AFCE59900A5BD43 /* AppDelegate.swift */; };
@@ -19,6 +20,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		151F600323FA9D3D006D326C /* StatePlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatePlay.swift; sourceTree = "<group>"; };
 		156BBE3223E4715000383DAA /* TrackModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackModel.swift; sourceTree = "<group>"; };
 		1ABC4E081B021338007A2945 /* Array+removeObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+removeObject.swift"; sourceTree = "<group>"; };
 		1AF39D171AFCE59900A5BD43 /* bonjour-demo-mac.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "bonjour-demo-mac.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -90,6 +92,7 @@
 				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
 				156BBE3223E4715000383DAA /* TrackModel.swift */,
+				151F600323FA9D3D006D326C /* StatePlay.swift */,
 			);
 			path = "bonjour-demo-mac";
 			sourceTree = "<group>";
@@ -179,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				1AF39D1F1AFCE59900A5BD43 /* ViewController.swift in Sources */,
+				151F600423FA9D3D006D326C /* StatePlay.swift in Sources */,
 				1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */,
 				156BBE3323E4715000383DAA /* TrackModel.swift in Sources */,
 				957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */,
