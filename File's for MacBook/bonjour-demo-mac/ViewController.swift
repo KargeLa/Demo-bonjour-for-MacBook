@@ -57,7 +57,7 @@ class ViewController: NSViewController {
     //MARK: Sending a playlist to a remotecontrol
     
     private func sendData(trackList: TrackList) {
-
+        
         guard let data = try? JSONEncoder().encode(trackList) else { return }
         
         bonjourClient.send(data)
@@ -93,7 +93,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         albumNameLabel.stringValue = ""
         trackImage.image = NSImage()
         commandFromRemote.stringValue = ""
-         connectedToLabel.stringValue = ""
+        connectedToLabel.stringValue = ""
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
