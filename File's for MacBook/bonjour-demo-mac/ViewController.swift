@@ -14,6 +14,8 @@ class ViewController: NSViewController {
     
     var trackList: TrackList?
     var playCommand: Bool = false
+    var prevCommand: Bool = false
+    var nextCommand: Bool = false
     
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -39,15 +41,23 @@ class ViewController: NSViewController {
     @IBAction func playStopButtonClicked(_ sender: NSButton) {
         playCommand.toggle()
         if playCommand == true {
-            let json = ["action": 0, "currentTime": 5, "currentVolume": 30, "trackList": trackList] as [String : Any]
+            let json = ["action": 0, "currentTime": 0.0, "currentVolume": 20]
             sendData(json)
         } else if playCommand == false {
-            let json = ["action": 1, "currentTime": 9, "currentVolume": 30, "trackList": trackList] as [String : Any]
+            let json = ["action": 1, "currentTime": 20, "currentVolume": 30]
             sendData(json)
         }
     }
     
+    @IBAction func prevButtonClicked(_ sender: NSButton) {
+        let json = ["action": 3, "currentTime": 0, "currentVolume": 30]
+        sendData(json)
+    }
     
+    @IBAction func nextButtonClicked(_ sender: NSButton) {
+        let json = ["action": 2, "currentTime": 0, "currentVolume": 30]
+        sendData(json)
+    }
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -78,8 +88,8 @@ class ViewController: NSViewController {
             return
         }
         /*guard let data = try? JSONEncoder().encode(trackList) else { return }
-        
-        bonjourClient.send(data)*/
+         
+         bonjourClient.send(data)*/
         bonjourClient.send(commandData)
     }
     
@@ -87,6 +97,7 @@ class ViewController: NSViewController {
         guard let data = try? JSONEncoder().encode(trackList) else {
             return
         }
+        bonjourClient.send(data)
     }
     
     //MARK: Track information update in QXPlayer
@@ -127,6 +138,8 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         
         guard let trackList = trackList else { return }
         updateUI(trackInformation: trackList.currentTrack)
+        
+        sendTrackList(trackList: trackList)
     }
     
     func handleBody(_ body: Data?) {
