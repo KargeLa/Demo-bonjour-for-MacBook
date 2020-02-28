@@ -13,6 +13,7 @@ class ViewController: NSViewController {
     //MARK: - Propeties
     
     var trackList: TrackList?
+    var playCommand: Bool = false
     
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -33,12 +34,27 @@ class ViewController: NSViewController {
     @IBOutlet private weak var albumNameLabel: NSTextField!
     @IBOutlet private weak var connectedToLabel: NSTextField!
     
+    //MARK: - Actions
+    
+    @IBAction func playStopButtonClicked(_ sender: NSButton) {
+        playCommand.toggle()
+        if playCommand == true {
+            let json = ["action": 0, "currentTime": 5, "currentVolume": 30, "trackList": trackList] as [String : Any]
+            sendData(json)
+        } else if playCommand == false {
+            let json = ["action": 1, "currentTime": 9, "currentVolume": 30, "trackList": trackList] as [String : Any]
+            sendData(json)
+        }
+    }
+    
+    
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // create tracks
         var tracksInformation: [TrackInformation] = []
+        
         
         let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
         tracksInformation.append(firstTrack)
@@ -56,11 +72,21 @@ class ViewController: NSViewController {
     
     //MARK: Sending a playlist to a remotecontrol
     
-    private func sendData(trackList: TrackList) {
+    private func sendData(_ json: [String: Any]) {
         
-        guard let data = try? JSONEncoder().encode(trackList) else { return }
+        guard let commandData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]) else {
+            return
+        }
+        /*guard let data = try? JSONEncoder().encode(trackList) else { return }
         
-        bonjourClient.send(data)
+        bonjourClient.send(data)*/
+        bonjourClient.send(commandData)
+    }
+    
+    private func sendTrackList(trackList: TrackList?) {
+        guard let data = try? JSONEncoder().encode(trackList) else {
+            return
+        }
     }
     
     //MARK: Track information update in QXPlayer
@@ -101,8 +127,6 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         
         guard let trackList = trackList else { return }
         updateUI(trackInformation: trackList.currentTrack)
-        
-        sendData(trackList: trackList)
     }
     
     func handleBody(_ body: Data?) {
