@@ -35,29 +35,36 @@ class ViewController: NSViewController {
     @IBOutlet private weak var trackNameLabel: NSTextField!
     @IBOutlet private weak var albumNameLabel: NSTextField!
     @IBOutlet private weak var connectedToLabel: NSTextField!
+    @IBOutlet weak var currentTimeSlider: NSSlider!
+    @IBOutlet weak var currentValumeSlider: NSSlider!
     
     //MARK: - Actions
     
     @IBAction func playStopButtonClicked(_ sender: NSButton) {
         playCommand.toggle()
         if playCommand == true {
-            let json = ["action": 0, "currentTime": 0.0, "currentVolume": 20]
+            let json = ["action": 0, "maxCurrentTime": 100, "currentTime": 0, "currentVolume": 20]
             sendData(json)
         } else if playCommand == false {
-            let json = ["action": 1, "currentTime": 20, "currentVolume": 30]
+            let json = ["action": 1, /*"maxCurrentTime": 100, "currentTime": 20,*/ "currentVolume": 30]
             sendData(json)
         }
     }
     
     @IBAction func prevButtonClicked(_ sender: NSButton) {
-        let json = ["action": 3, "currentTime": 0, "currentVolume": 30]
+        let json = ["action": 3, "maxCurrentTime": 100,"currentTime": 0, "currentVolume": 20]
         sendData(json)
     }
     
     @IBAction func nextButtonClicked(_ sender: NSButton) {
-        let json = ["action": 2, "currentTime": 0, "currentVolume": 30]
+        let json = ["action": 2, "maxCurrentTime": 80,"currentTime": 0, "currentVolume": 20]
         sendData(json)
     }
+    @IBAction func currentTimeSliderChanged(_ sender: NSSlider) {
+    }
+    @IBAction func currentVolumeSliderChanged(_ sender: NSSlider) {
+    }
+    
     //MARK: - Life Cycle
     
     override func viewDidLoad() {
@@ -83,13 +90,9 @@ class ViewController: NSViewController {
     //MARK: Sending a playlist to a remotecontrol
     
     private func sendData(_ json: [String: Any]) {
-        
         guard let commandData = try? JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted]) else {
             return
         }
-        /*guard let data = try? JSONEncoder().encode(trackList) else { return }
-         
-         bonjourClient.send(data)*/
         bonjourClient.send(commandData)
     }
     
@@ -161,6 +164,31 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                     trackList?.currentTrack = trackInformation
                     updateUI(trackInformation: trackInformation)
                 }
+            }
+        }
+        if let package = try? JSONDecoder().decode(Package.self, from: body),
+            let actionInt = package.action,
+            let action = ActionType(rawValue: actionInt) {
+            switch action {
+                
+            case .play:
+                commandFromRemote.stringValue = "Playning music"
+                break
+            case .pause:
+                commandFromRemote.stringValue = "music not playning "
+                break
+            case .next:
+                guard let trackInformation = trackList?.nextTrack() else { return }
+                updateUI(trackInformation: trackInformation)
+                break
+            case .prev:
+                guard let trackInformation = trackList?.prevTrack() else { return }
+                updateUI(trackInformation: trackInformation)
+                break
+            case .volume:
+                break
+            case .time:
+                break
             }
         }
     }

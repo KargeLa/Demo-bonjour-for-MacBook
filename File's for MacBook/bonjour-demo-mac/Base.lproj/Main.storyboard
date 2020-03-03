@@ -727,7 +727,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarRewindTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="e2N-wd-Rf4">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="label" size="13"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="prevButtonClicked:" target="XfG-lQ-9wD" id="X6u-El-3iv"/>
@@ -738,7 +738,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarFastForwardTemplate" imagePosition="only" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="7WN-2X-uah">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="label" size="13"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="nextButtonClicked:" target="XfG-lQ-9wD" id="BXO-0D-HG7"/>
@@ -749,7 +749,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <buttonCell key="cell" type="push" bezelStyle="rounded" image="NSTouchBarPlayPauseTemplate" imagePosition="overlaps" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="ryc-VV-HIx">
                                     <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                                    <font key="font" metaFont="system"/>
+                                    <font key="font" metaFont="label" size="13"/>
                                 </buttonCell>
                                 <connections>
                                     <action selector="playStopButtonClicked:" target="XfG-lQ-9wD" id="VxQ-tB-4i5"/>
@@ -760,12 +760,30 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                                 <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" id="pLw-no-nY6"/>
                             </imageView>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="yTM-wp-lmA">
+                                <rect key="frame" x="30" y="167" width="96" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="7Ve-sA-QgB"/>
+                                <connections>
+                                    <action selector="currentTimeSliderChanged:" target="XfG-lQ-9wD" id="DJg-9s-Kaa"/>
+                                </connections>
+                            </slider>
+                            <slider verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="V4N-mR-i8o">
+                                <rect key="frame" x="30" y="96" width="96" height="19"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                                <sliderCell key="cell" state="on" alignment="left" maxValue="100" doubleValue="50" tickMarkPosition="above" sliderType="linear" id="liZ-J9-kes"/>
+                                <connections>
+                                    <action selector="currentVolumeSliderChanged:" target="XfG-lQ-9wD" id="8qc-jz-Ne6"/>
+                                </connections>
+                            </slider>
                         </subviews>
                     </view>
                     <connections>
                         <outlet property="albumNameLabel" destination="Z1h-Nu-b02" id="Cpk-E5-W39"/>
                         <outlet property="commandFromRemote" destination="0j7-Mw-Za5" id="ZKm-8e-TEl"/>
                         <outlet property="connectedToLabel" destination="pFz-15-0Zm" id="5gt-vD-Hvr"/>
+                        <outlet property="currentTimeSlider" destination="yTM-wp-lmA" id="QG3-Ux-vZg"/>
+                        <outlet property="currentValumeSlider" destination="V4N-mR-i8o" id="NIx-wn-GPy"/>
                         <outlet property="trackImage" destination="c9y-oV-3R5" id="ytx-jn-L1o"/>
                         <outlet property="trackNameLabel" destination="Ir2-R4-3zS" id="797-iW-GPL"/>
                     </connections>
