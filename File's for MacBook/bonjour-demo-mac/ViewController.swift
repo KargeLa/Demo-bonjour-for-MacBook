@@ -12,7 +12,8 @@ class ViewController: NSViewController {
     
     //MARK: - Propeties
     
-    var trackList: TrackList?
+    var currentTrack: TrackInformation?
+    var listTrack: [String]?
     
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -44,16 +45,14 @@ class ViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // create tracks
-        var tracksInformation: [TrackInformation] = []
-        
+
         let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
-        tracksInformation.append(firstTrack)
         let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
-        tracksInformation.append(secondTrack)
         let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
-        tracksInformation.append(thirdTrack)
+       
         
-        trackList = TrackList(tracksInformation: tracksInformation, currentTrack: tracksInformation[0])
+        currentTrack = firstTrack
+        listTrack = [firstTrack.trackName, secondTrack.trackName, thirdTrack.trackName]
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -70,13 +69,6 @@ class ViewController: NSViewController {
     }
     
     //MARK: Sending a playlist to a remotecontrol
-    
-    private func sendData(trackList: TrackList) {
-
-        guard let data = trackList.json else { return }
-        
-        bonjourClient.send(data)
-    }
     
     //MARK: Track information update in QXPlayer
     
@@ -119,31 +111,50 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     func connectedTo(_ socket: GCDAsyncSocket!) {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
         
-        guard let trackList = trackList else { return }
-        updateUI(trackInformation: trackList.currentTrack)
+        guard let currentTrack = currentTrack else { return }
+        let playerData = PlayerData(volume: nil, metaData: currentTrack, command: nil, currentTime: nil, listTrack: listTrack, currentTrackName: nil)
+        updateUI(trackInformation: currentTrack)
         
-        sendData(trackList: trackList)
+         guard let data = playerData.json else { return }
+         bonjourClient.send(data)
     }
     
     func handleBody(_ body: Data?) {
-        guard let body = body else { return }
-        if let command = String(data: body, encoding: .utf8) {
+        guard let data = body else { return }
+        guard let playerData = try? JSONDecoder().decode(PlayerData.self, from: data) else { return }
+        
+        if let _ = playerData.volume {
+            print("Volume")
+        }
+        if let _ = playerData.metaData {
+            print("metadata")
+        }
+        if let command = playerData.command {
             switch command {
-            case "playningMusic":
-                currentState = .playningMusic
-            case "notPlayningMusic":
-                currentState = .notPlayningMusic
-            case "back":
-                guard let trackInformation = trackList?.prevTrack() else { return }
-                updateUI(trackInformation: trackInformation)
-            case "forward":
-                guard let trackInformation = trackList?.nextTrack() else { return }
-                updateUI(trackInformation: trackInformation)
+            case "back": print("back")
+            case "forward": print("forward")
+            case StatePlay.notPlayningMusic.rawValue: print("notPlayningMusic")
+            case StatePlay.playningMusic.rawValue: print("playningMusic")
+                
             default:
-                if let trackInformation = trackList?.searchTrack(byTrackName: command) {
-                    trackList?.currentTrack = trackInformation
-                    updateUI(trackInformation: trackInformation)
-                }
+                print("default")
+            }
+        }
+        if let _ = playerData.currentTime {
+            print("currentTime")
+        }
+        if let _ = playerData.listTrack {
+            print("listTrack")
+        }
+        if let currentTrackName = playerData.currentTrackName {
+            if let track = listTrack!.first(where: { (elements) -> Bool in
+                elements == currentTrackName
+            }) {
+                let playerData = PlayerData(volume: nil, metaData: TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! ), command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+                updateUI(trackInformation: TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! ))
+                
+                 guard let data = playerData.json else { return }
+                 bonjourClient.send(data)
             }
         }
     }
