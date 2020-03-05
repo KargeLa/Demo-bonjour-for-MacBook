@@ -43,10 +43,10 @@ import Foundation
 //}
 
 struct PlayerData: Codable {
-    var volume: Int?
-    var metaData: TrackInformation?
+    var volume: Float?
+    var metaData: MetaData?
     var command: String?
-    var currentTime: Int?
+    var currentTime: Float?
     var listTrack: [String]?
     var currentTrackName: String?
     
@@ -56,8 +56,15 @@ struct PlayerData: Codable {
     }
 }
 
-struct TrackInformation: Codable {
-    var trackName: String
+struct MetaData: Codable {
+    var title: String
     var albumName: String
-    var imageData: Data
+    var artistName: String?
+    var albumArt: Data
+    var formatName: String?
+    var sampleRate: Int?
+    var bitRatePerChannel: Int?
+    var bitRate: Int?
+    var duration: Float?
+    var year: String?
 }

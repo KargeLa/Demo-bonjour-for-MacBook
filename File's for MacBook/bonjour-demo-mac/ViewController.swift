@@ -12,9 +12,9 @@ class ViewController: NSViewController {
     
     //MARK: - Propeties
     
-    var currentTrack: TrackInformation?
+    var currentTrack: MetaData?
     var listTrack: [String]?
-    var trackList: [TrackInformation]?
+    var trackList: [MetaData]?
     
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -48,22 +48,23 @@ class ViewController: NSViewController {
         // create tracks
 
         trackList = []
-        let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
-        let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
-        let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
+        let firstTrack = MetaData(title: "FirstTrack", albumName: "FitsrAlbum", albumArt: (NSImage(named: "image_1")?.tiffRepresentation)! )
+        let secondTrack = MetaData(title: "SecondTrack", albumName: "SecondAlbum", albumArt: (NSImage(named: "image_2")?.tiffRepresentation)! )
+        let thirdTrack = MetaData(title: "ThirdTrack", albumName: "ThirdAlbum", albumArt: (NSImage(named: "image_3")?.tiffRepresentation)! )
         trackList?.append(firstTrack)
         trackList?.append(secondTrack)
         trackList?.append(thirdTrack)
         
         currentTrack = firstTrack
         listTrack = []
-        listTrack = trackList!.map({ $0.trackName })
+        listTrack = trackList!.map({ $0.title })
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
         
+        
+
     }
-    
     //MARK: - Action
     
     @IBAction func playButtonAction(_ sender: Any) {
@@ -77,10 +78,10 @@ class ViewController: NSViewController {
     
     //MARK: Track information update in QXPlayer
     
-    private func updateUI(trackInformation: TrackInformation) {
-        trackNameLabel.stringValue = trackInformation.trackName
+    private func updateUI(trackInformation: MetaData) {
+        trackNameLabel.stringValue = trackInformation.title
         albumNameLabel.stringValue = trackInformation.albumName
-        trackImage.image = NSImage(data: trackInformation.imageData)
+        trackImage.image = NSImage(data: trackInformation.albumArt)
     }
     
     private func sendCommand(command: String) {
@@ -90,10 +91,10 @@ class ViewController: NSViewController {
     }
     
     private func forwardAction() {
-        if currentTrack!.trackName == trackList!.last?.trackName {
+        if currentTrack!.title == trackList!.last?.title {
             return
         } else {
-            guard let currentIndex = trackList!.firstIndex(where: { $0.trackName == currentTrack!.trackName }) else { return }
+            guard let currentIndex = trackList!.firstIndex(where: { $0.title == currentTrack!.title }) else { return }
             currentTrack = trackList![currentIndex + 1]
             updateUI(trackInformation: currentTrack!)
             
@@ -104,10 +105,10 @@ class ViewController: NSViewController {
     }
     
     private func backwardAction() {
-        if currentTrack!.trackName == trackList!.first?.trackName {
+        if currentTrack!.title == trackList!.first?.title {
             return
         } else {
-            guard let currentIndex = trackList!.firstIndex(where: { $0.trackName == currentTrack!.trackName }) else { return }
+            guard let currentIndex = trackList!.firstIndex(where: { $0.title == currentTrack!.title }) else { return }
             currentTrack = trackList![currentIndex - 1]
             updateUI(trackInformation: currentTrack!)
             
@@ -155,8 +156,8 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         guard let data = body else { return }
         guard let playerData = try? JSONDecoder().decode(PlayerData.self, from: data) else { return }
         
-        if let _ = playerData.volume {
-            print("Volume")
+        if let volume = playerData.volume {
+            print(volume)
         }
         if let _ = playerData.metaData {
             print("metadata")
@@ -172,8 +173,8 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                 print("default")
             }
         }
-        if let _ = playerData.currentTime {
-            print("currentTime")
+        if let currentTime = playerData.currentTime {
+            print(currentTime)
         }
         if let _ = playerData.listTrack {
             print("listTrack")
@@ -181,7 +182,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         if let currentTrackName = playerData.currentTrackName {
             
             if let track = trackList!.first(where: { (elements) -> Bool in
-                elements.trackName == currentTrackName
+                elements.title == currentTrackName
             }) {
                 let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
                 currentTrack = track
