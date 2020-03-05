@@ -98,7 +98,7 @@ class ViewController: NSViewController {
             currentTrack = trackList![currentIndex + 1]
             updateUI(trackInformation: currentTrack!)
             
-            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
             guard let data = playerData.json else { return }
             bonjourClient.send(data)
         }
@@ -112,7 +112,7 @@ class ViewController: NSViewController {
             currentTrack = trackList![currentIndex - 1]
             updateUI(trackInformation: currentTrack!)
             
-            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
             guard let data = playerData.json else { return }
             bonjourClient.send(data)
         }
@@ -145,7 +145,19 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
         
         guard let currentTrack = currentTrack else { return }
-        let playerData = PlayerData(volume: nil, metaData: currentTrack, command: nil, currentTime: nil, listTrack: listTrack, currentTrackName: nil)
+        
+        let playerFileSystem = PlayerFileSystem(trackList: listTrack!,
+                                                titleMainFolder: "mainFolder",
+                                                titlePreviousFolder: "previousFolder",
+                                                otherFolders: ["firstFolder", "secondFolder", "thirdFolder"])
+        
+        let playerData = PlayerData(volume: nil,
+                                    metaData: currentTrack,
+                                    command: nil,
+                                    currentTime: nil,
+                                    playerFileSystem: playerFileSystem,
+                                    currentTrackName: nil)
+        
         updateUI(trackInformation: currentTrack)
         
         guard let data = playerData.json else { return }
@@ -176,7 +188,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         if let currentTime = playerData.currentTime {
             print(currentTime)
         }
-        if let _ = playerData.listTrack {
+        if let _ = playerData.playerFileSystem {
             print("listTrack")
         }
         if let currentTrackName = playerData.currentTrackName {
@@ -184,7 +196,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             if let track = trackList!.first(where: { (elements) -> Bool in
                 elements.title == currentTrackName
             }) {
-                let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+                let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
                 currentTrack = track
                 updateUI(trackInformation: track)
                 

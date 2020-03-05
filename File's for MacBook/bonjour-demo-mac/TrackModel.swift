@@ -47,7 +47,7 @@ struct PlayerData: Codable {
     var metaData: MetaData?
     var command: String?
     var currentTime: Float?
-    var listTrack: [String]?
+    var playerFileSystem: PlayerFileSystem?
     var currentTrackName: String?
     
     var json: Data? {
@@ -67,4 +67,11 @@ struct MetaData: Codable {
     var bitRate: Int?
     var duration: Float?
     var year: String?
+}
+
+struct PlayerFileSystem: Codable {
+    var trackList: [String]?
+    var titleMainFolder: String
+    var titlePreviousFolder: String?
+    var otherFolders: [String]?
 }
