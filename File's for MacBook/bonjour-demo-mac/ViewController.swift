@@ -14,6 +14,7 @@ class ViewController: NSViewController {
     
     var currentTrack: TrackInformation?
     var listTrack: [String]?
+    var trackList: [TrackInformation]?
     
     private var bonjourServer: BonjourServer! {
         didSet {
@@ -46,13 +47,17 @@ class ViewController: NSViewController {
         super.viewDidLoad()
         // create tracks
 
+        trackList = []
         let firstTrack = TrackInformation(trackName: "FirstTrack", albumName: "FitsrAlbum", imageData: (NSImage(named: "image_1")?.tiffRepresentation)! )
         let secondTrack = TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! )
         let thirdTrack = TrackInformation(trackName: "ThirdTrack", albumName: "ThirdAlbum", imageData: (NSImage(named: "image_3")?.tiffRepresentation)! )
-       
+        trackList?.append(firstTrack)
+        trackList?.append(secondTrack)
+        trackList?.append(thirdTrack)
         
         currentTrack = firstTrack
-        listTrack = [firstTrack.trackName, secondTrack.trackName, thirdTrack.trackName]
+        listTrack = []
+        listTrack = trackList!.map({ $0.trackName })
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -84,6 +89,33 @@ class ViewController: NSViewController {
         }
     }
     
+    private func forwardAction() {
+        if currentTrack!.trackName == trackList!.last?.trackName {
+            return
+        } else {
+            guard let currentIndex = trackList!.firstIndex(where: { $0.trackName == currentTrack!.trackName }) else { return }
+            currentTrack = trackList![currentIndex + 1]
+            updateUI(trackInformation: currentTrack!)
+            
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+            guard let data = playerData.json else { return }
+            bonjourClient.send(data)
+        }
+    }
+    
+    private func backwardAction() {
+        if currentTrack!.trackName == trackList!.first?.trackName {
+            return
+        } else {
+            guard let currentIndex = trackList!.firstIndex(where: { $0.trackName == currentTrack!.trackName }) else { return }
+            currentTrack = trackList![currentIndex - 1]
+            updateUI(trackInformation: currentTrack!)
+            
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+            guard let data = playerData.json else { return }
+            bonjourClient.send(data)
+        }
+    }
 }
 
 //MARK: - BonjourServerDelegate, BonjourClientDelegate
@@ -115,8 +147,8 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         let playerData = PlayerData(volume: nil, metaData: currentTrack, command: nil, currentTime: nil, listTrack: listTrack, currentTrackName: nil)
         updateUI(trackInformation: currentTrack)
         
-         guard let data = playerData.json else { return }
-         bonjourClient.send(data)
+        guard let data = playerData.json else { return }
+        bonjourClient.send(data)
     }
     
     func handleBody(_ body: Data?) {
@@ -131,10 +163,10 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         }
         if let command = playerData.command {
             switch command {
-            case "back": print("back")
-            case "forward": print("forward")
-            case StatePlay.notPlayningMusic.rawValue: print("notPlayningMusic")
-            case StatePlay.playningMusic.rawValue: print("playningMusic")
+            case "back": backwardAction()
+            case "forward": forwardAction()
+            case StatePlay.notPlayningMusic.rawValue: currentState = .notPlayningMusic
+            case StatePlay.playningMusic.rawValue: currentState = .playningMusic
                 
             default:
                 print("default")
@@ -147,14 +179,16 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             print("listTrack")
         }
         if let currentTrackName = playerData.currentTrackName {
-            if let track = listTrack!.first(where: { (elements) -> Bool in
-                elements == currentTrackName
+            
+            if let track = trackList!.first(where: { (elements) -> Bool in
+                elements.trackName == currentTrackName
             }) {
-                let playerData = PlayerData(volume: nil, metaData: TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! ), command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
-                updateUI(trackInformation: TrackInformation(trackName: "SecondTrack", albumName: "SecondAlbum", imageData: (NSImage(named: "image_2")?.tiffRepresentation)! ))
+                let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, listTrack: nil, currentTrackName: nil)
+                currentTrack = track
+                updateUI(trackInformation: track)
                 
-                 guard let data = playerData.json else { return }
-                 bonjourClient.send(data)
+                guard let data = playerData.json else { return }
+                bonjourClient.send(data)
             }
         }
     }
