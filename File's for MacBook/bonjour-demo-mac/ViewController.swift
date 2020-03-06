@@ -98,7 +98,7 @@ class ViewController: NSViewController {
             currentTrack = trackList![currentIndex + 1]
             updateUI(trackInformation: currentTrack!)
             
-            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, fileSystem: nil, currentTrackName: nil)
             guard let data = playerData.json else { return }
             bonjourClient.send(data)
         }
@@ -112,7 +112,7 @@ class ViewController: NSViewController {
             currentTrack = trackList![currentIndex - 1]
             updateUI(trackInformation: currentTrack!)
             
-            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
+            let playerData = PlayerData(volume: nil, metaData: currentTrack!, command: nil, currentTime: nil, fileSystem: nil, currentTrackName: nil)
             guard let data = playerData.json else { return }
             bonjourClient.send(data)
         }
@@ -145,18 +145,28 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
         
         guard let currentTrack = currentTrack else { return }
+        let fileSystem: [File] = [
+            File(name: "firstFolder", type: .folder, path: "pathfolderFirst/firstFolder"),
+            File(name: "secondFolder", type: .folder, path: "pathSecondFolder"),
+            File(name: "firstTrack", type: .music, path: "mainFolder/pathfirstTrack/firstTrack.syt"),
+            File(name: "secondTrack", type: .music, path: "pathsecondtrack"),
+            File(name: "thirdTrack", type: .music, path: "paththerdtrack"),
+            File(name: "fourTrack", type: .music, path: "pathfoutrTrack"),
+            File(name: "fiveTrack", type: .music, path: "pathfiveTrack"),
+            File(name: "sixTrack", type: .music, path: "pathsixtrack"),
+            File(name: "thirdFolder", type: .folder, path: "paththirdFolder"),
+            File(name: "fourFolder", type: .folder, path: "pathFourFolder"),
+            File(name: "sevenTrack", type: .music, path: "pathseventrack")
+        ]
         
-        let playerFileSystem = PlayerFileSystem(trackList: listTrack!,
-                                                titleMainFolder: "mainFolder",
-                                                titlePreviousFolder: "previousFolder",
-                                                otherFolders: ["firstFolder", "secondFolder", "thirdFolder"])
         
         let playerData = PlayerData(volume: nil,
                                     metaData: currentTrack,
                                     command: nil,
                                     currentTime: nil,
-                                    playerFileSystem: playerFileSystem,
-                                    currentTrackName: nil)
+                                    fileSystem: fileSystem,
+                                    currentTrackName: nil,
+                                    pathNewFolder: nil)
         
         updateUI(trackInformation: currentTrack)
         
@@ -188,7 +198,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         if let currentTime = playerData.currentTime {
             print(currentTime)
         }
-        if let _ = playerData.playerFileSystem {
+        if let _ = playerData.fileSystem {
             print("listTrack")
         }
         if let currentTrackName = playerData.currentTrackName {
@@ -196,13 +206,33 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
             if let track = trackList!.first(where: { (elements) -> Bool in
                 elements.title == currentTrackName
             }) {
-                let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, playerFileSystem: nil, currentTrackName: nil)
+                let playerData = PlayerData(volume: nil, metaData: track, command: nil, currentTime: nil, fileSystem: nil, currentTrackName: nil, pathNewFolder: nil)
                 currentTrack = track
                 updateUI(trackInformation: track)
                 
                 guard let data = playerData.json else { return }
                 bonjourClient.send(data)
             }
+        }
+        if let path = playerData.pathNewFolder {
+            print(path)
+//            let fileSystem: [File] = [File(name: "firstFolder", type: .folder, path: "pathfolderFirst"),
+//                                      File(name: "secondFolder", type: .folder, path: "pathSecondFolder"),
+//                                      File(name: "firstTrack", type: .music, path: "pathfirstTrack"),
+//                                      File(name: "secondTrack", type: .music, path: "pathsecondtrack"),
+//                                      File(name: "thirdTrack", type: .music, path: "paththerdtrack")]
+//
+//
+//            let playerData = PlayerData(volume: nil,
+//                                        metaData: nil,
+//                                        command: nil,
+//                                        currentTime: nil,
+//                                        fileSystem: fileSystem,
+//                                        currentTrackName: nil,
+//                                        pathNewFolder: nil)
+//
+//            guard let data = playerData.json else { return }
+//            bonjourClient.send(data)
         }
     }
 }

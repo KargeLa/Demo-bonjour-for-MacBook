@@ -47,8 +47,9 @@ struct PlayerData: Codable {
     var metaData: MetaData?
     var command: String?
     var currentTime: Float?
-    var playerFileSystem: PlayerFileSystem?
+    var fileSystem: [File]?
     var currentTrackName: String?
+    var pathNewFolder: String?
     
     var json: Data? {
         guard let data = try? JSONEncoder().encode(self) else { return nil }
@@ -69,9 +70,13 @@ struct MetaData: Codable {
     var year: String?
 }
 
-struct PlayerFileSystem: Codable {
-    var trackList: [String]?
-    var titleMainFolder: String
-    var titlePreviousFolder: String?
-    var otherFolders: [String]?
+struct File: Codable {
+    var name: String
+    var type: TypeFile
+    var path: String
+}
+
+enum TypeFile: String, Codable {
+    case music
+    case folder
 }
