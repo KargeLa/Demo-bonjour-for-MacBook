@@ -221,11 +221,13 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                 break
             case .next:
                 if let trackInformation = nextTrack()  {
+                    sendingTrackInformation?.currentTrack = trackInformation
                     updateUI(metaData: trackInformation)
                 }
                 break
             case .prev:
                 if let trackInformation = prevTrack()  {
+                    sendingTrackInformation?.currentTrack = trackInformation
                 updateUI(metaData: trackInformation)
                 }
                 break
@@ -237,6 +239,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                 if let trackName = package.currentTrackName {
                     let currentTrack = searchTrack(byTrackName: trackName)
                     if let currentTrack = currentTrack {
+                        sendingTrackInformation?.currentTrack = currentTrack
                         updateUI(metaData: currentTrack)
                         let package = PlayerManager(currentTrack: currentTrack, action: 7, maxCurrentTime: 90, currentTime: 0)
                         guard let data = try? JSONEncoder().encode(package) else {
