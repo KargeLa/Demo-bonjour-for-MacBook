@@ -27,6 +27,12 @@ class ViewController: NSViewController {
         }
     }
     
+    var currentState: StatePlay = .notPlayningMusic {
+        didSet {
+            commandFromRemote.stringValue = currentState.rawValue
+        }
+    }
+
     //MARK: - Outlets
     
     @IBOutlet private weak var commandFromRemote: NSTextField!
@@ -81,6 +87,22 @@ class ViewController: NSViewController {
         
     }
     
+<<<<<<< HEAD
+    //MARK: - Action
+    
+    @IBAction func playButtonAction(_ sender: Any) {
+        if connectedToLabel.stringValue != "" {
+            currentState = currentState.opposite
+            sendCommand(command: currentState.rawValue)
+        }
+    }
+    
+    //MARK: Sending a playlist to a remotecontrol
+    
+    private func sendData(trackList: TrackList) {
+
+        guard let data = trackList.json else { return }
+=======
     //MARK: - Supporting
     
     func searchTrack(byTrackName trackName: String) -> MetaData? {
@@ -111,6 +133,7 @@ class ViewController: NSViewController {
     }
     
     func prevTrack() -> MetaData? {
+>>>>>>> AlexDevelop
         
         if let currentTrack = sendingTrackInformation?.currentTrack?.title {
             if currentTrack == trackList[0].title {
@@ -155,7 +178,15 @@ class ViewController: NSViewController {
         bonjourClient.send(commandData)
     }
     
+<<<<<<< HEAD
+    private func sendCommand(command: String) {
+        if let data = command.data(using: .utf8) {
+            bonjourClient.send(data)
+        }
+    }
+=======
     //MARK: Track information update in QXPlayer
+>>>>>>> AlexDevelop
     
     private func updateUI(metaData: MetaData) {
         trackNameLabel.stringValue = metaData.title
@@ -204,6 +235,24 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     
     func handleBody(_ body: Data?) {
         guard let body = body else { return }
+<<<<<<< HEAD
+        if let command = String(data: body, encoding: .utf8) {
+            switch command {
+            case "playningMusic":
+                currentState = .playningMusic
+            case "notPlayningMusic":
+                currentState = .notPlayningMusic
+            case "back":
+                guard let trackInformation = trackList?.prevTrack() else { return }
+                updateUI(trackInformation: trackInformation)
+            case "forward":
+                guard let trackInformation = trackList?.nextTrack() else { return }
+                updateUI(trackInformation: trackInformation)
+            default:
+                if let trackInformation = trackList?.searchTrack(byTrackName: command) {
+                    trackList?.currentTrack = trackInformation
+                    updateUI(trackInformation: trackInformation)
+=======
         if let package = try? JSONDecoder().decode(PlayerManager.self, from: body),
             let actionInt = package.action,
             let action = ActionType(rawValue: actionInt) {
@@ -244,6 +293,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                         }
                         bonjourClient.send(data)
                     }
+>>>>>>> AlexDevelop
                 }
                 break
             }
