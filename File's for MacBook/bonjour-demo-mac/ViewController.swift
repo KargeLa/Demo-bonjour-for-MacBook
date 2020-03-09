@@ -162,7 +162,7 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
         
         let playerData = PlayerData(volume: nil,
                                     metaData: currentTrack,
-                                    command: nil,
+                                    command: currentState.rawValue,
                                     currentTime: nil,
                                     fileSystem: fileSystem,
                                     currentTrackName: nil,
