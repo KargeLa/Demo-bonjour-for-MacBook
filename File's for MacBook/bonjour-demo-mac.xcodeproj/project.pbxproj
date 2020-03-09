@@ -16,7 +16,7 @@
 		1AF4755A1B04BCBE00E84914 /* BonjourServer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF475591B04BCBE00E84914 /* BonjourServer.swift */; };
 		1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 1AF475651B04CED500E84914 /* GCDAsyncSocket.m */; };
 		957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957626E023B61C0A00696C7E /* BonjourClient.swift */; };
-		FAAF4259240E7ECA00DF6296 /* Package.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAF4258240E7EC900DF6296 /* Package.swift */; };
+		FAAF4259240E7ECA00DF6296 /* MetaData.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAAF4258240E7EC900DF6296 /* MetaData.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,7 +33,7 @@
 		1AF475641B04CED500E84914 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GCDAsyncSocket.h; path = "bonjour-demo-mac/GCDAsyncSocket.h"; sourceTree = SOURCE_ROOT; };
 		1AF475651B04CED500E84914 /* GCDAsyncSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GCDAsyncSocket.m; path = "bonjour-demo-mac/GCDAsyncSocket.m"; sourceTree = SOURCE_ROOT; };
 		957626E023B61C0A00696C7E /* BonjourClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BonjourClient.swift; sourceTree = "<group>"; };
-		FAAF4258240E7EC900DF6296 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
+		FAAF4258240E7EC900DF6296 /* MetaData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetaData.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,7 +92,7 @@
 				1AF39D221AFCE59900A5BD43 /* Main.storyboard */,
 				1AF39D1E1AFCE59900A5BD43 /* ViewController.swift */,
 				156BBE3223E4715000383DAA /* TrackModel.swift */,
-				FAAF4258240E7EC900DF6296 /* Package.swift */,
+				FAAF4258240E7EC900DF6296 /* MetaData.swift */,
 			);
 			path = "bonjour-demo-mac";
 			sourceTree = "<group>";
@@ -185,7 +185,7 @@
 				1AF475661B04CED500E84914 /* GCDAsyncSocket.m in Sources */,
 				156BBE3323E4715000383DAA /* TrackModel.swift in Sources */,
 				957626E123B61C0A00696C7E /* BonjourClient.swift in Sources */,
-				FAAF4259240E7ECA00DF6296 /* Package.swift in Sources */,
+				FAAF4259240E7ECA00DF6296 /* MetaData.swift in Sources */,
 				1ABC4E091B021338007A2945 /* Array+removeObject.swift in Sources */,
 				1AF4755A1B04BCBE00E84914 /* BonjourServer.swift in Sources */,
 				1AF39D1D1AFCE59900A5BD43 /* AppDelegate.swift in Sources */,
