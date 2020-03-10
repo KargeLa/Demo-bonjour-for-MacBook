@@ -13,6 +13,7 @@ class ViewController: NSViewController {
     //MARK: - Propeties
     
     var trackList: [MetaData] = []
+    var listTrack: [String]?
     var sendingTrackInformation: PlayerManager?
     var playCommand: Bool = false
     
@@ -72,9 +73,11 @@ class ViewController: NSViewController {
         
         sendingTrackInformation?.currentTrack = firstTrack
         
-        sendingTrackInformation?.nameOfTracks = []
+//        sendingTrackInformation?.nameOfTracks = []
+        listTrack = []
+        listTrack = trackList.map({ $0.title })
         
-        sendingTrackInformation?.nameOfTracks = trackList.map({ $0.title })
+//        sendingTrackInformation?.nameOfTracks = trackList.map({ $0.title })
         
         bonjourServer = BonjourServer()
         bonjourClient = BonjourClient()
@@ -187,14 +190,22 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
     }
     
     func connectedTo(_ socket: GCDAsyncSocket!) {
+        var fileSystem: [File] = []
+        
+        for i in 0..<4 { // add folders
+            fileSystem.append(File(name: "folder\(i)", type: .folder, path: "/path\(i)/" + "folder\(i)"))
+        }
+        
+        for i in 0..<listTrack!.count { // add music files
+            fileSystem.append(File(name: listTrack![i], type: .music, path: "/path\(i)/" + "\(listTrack![i])"))
+        }
+        
         connectedToLabel.stringValue = "Connected to " + (socket.connectedHost ?? "-")
         guard let currentTrack = sendingTrackInformation?.currentTrack else {
             return
         }
-        guard let nameOfTrack = sendingTrackInformation?.nameOfTracks else {
-            return
-        }
-        let package = PlayerManager(nameOfTracks: nameOfTrack, currentTrack: currentTrack, action: 0, maxCurrentTime: 100, currentTime: 0, currentVolume: 100)
+        
+        let package = PlayerManager(pathNewFolder: nil, fileSystem: fileSystem, currentTrack: currentTrack, action: 0, maxCurrentTime: 100, currentTime: 0, currentVolume: 20, currentTrackName: nil)
         guard let data = try? JSONEncoder().encode(package) else {
             return
         }
@@ -248,6 +259,9 @@ extension ViewController: BonjourServerDelegate, BonjourClientDelegate {
                         bonjourClient.send(data)
                     }
                 }
+                break
+            case .changedDir:
+                
                 break
             }
         }
